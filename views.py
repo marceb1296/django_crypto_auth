@@ -89,14 +89,3 @@ class LogoutAllView(APIView):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
-
-
-# Only for Test Case
-class MyTestView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        return Response({
-            "status": "Success"
-        }, status.HTTP_200_OK)
