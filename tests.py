@@ -290,7 +290,7 @@ class TestCryptoAuthetication(TestCase):
             self.token.key
         ))
 
-        response = self.client.post(url)
+        response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -315,7 +315,7 @@ class TestCryptoAuthetication(TestCase):
             self.token.key
         ))
 
-        response = self.client.post(url)
+        response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -329,7 +329,7 @@ class TestCryptoAuthetication(TestCase):
             self.refresh_token
         ))
 
-        response = self.client.post(url)
+        response = self.client.put(url)
         to_json = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

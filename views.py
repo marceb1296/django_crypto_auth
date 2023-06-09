@@ -58,7 +58,7 @@ class LoginView(APIView):
 class UpdateLoginView(LoginView):
     authentication_classes = [RefreshTokenAuthentication]
 
-    def post(self, request):
+    def put(self, request):
 
         token = request.auth
         if token is not None:
@@ -73,7 +73,7 @@ class LogoutView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
+    def delete(self, request):
         token = request.auth
         if token is not None:
             token.delete()
@@ -84,7 +84,7 @@ class LogoutAllView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
+    def delete(self, request):
         request.user.auth_crypto.all().delete()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
