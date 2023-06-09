@@ -3,5 +3,10 @@ from .models import CryptoToken
 
 # Register your models here.
 
-admin.site.register(CryptoToken)
+class CryptoTokenAdmin(admin.ModelAdmin):
+    list_display = ["user", "key", "created", "expiry"]
+    fields = []
+    raw_id_fields = ["user",]
+
+admin.site.register(CryptoToken, CryptoTokenAdmin)
 
