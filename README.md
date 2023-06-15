@@ -2,7 +2,7 @@
 
 ## Documentation:
 
-In progress, you will be able to find it at the following link: [Documentation](https://mhcode.xyz/docs/crypto_auth)
+[crypto_auth Documentation](https://docs.mhcode.xyz)
 
 ## Django Rest - Token Based Authentication
 
