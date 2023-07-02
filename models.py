@@ -4,7 +4,7 @@ from django.apps import apps
 from django.core.exceptions import ImproperlyConfigured
 from .cryptoAuth import CryptoAuthentication
 from django.utils import timezone
-from django.db.models import Model
+from django.core.exceptions import ValidationError
 
 try:
     from .app_settings import crypto_auth_setting
@@ -21,6 +21,9 @@ class AuthTokenManager(models.Manager):
             user, 
             expiry=crypto_auth_setting.get_token_expiry
         ):
+
+        if self.count() >= crypto_auth_setting.max_token_per_user:
+            raise ValidationError("Maximum amount of tokens allowed per user exceeded.")
 
         token = CryptoAuthentication()
         key_encrypted  = token.key(token.generate_token)

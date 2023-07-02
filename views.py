@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
+from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.db.models import Model
 from rest_framework import serializers
@@ -41,16 +42,14 @@ class LoginView(APIView):
 
         return serializer(obj).data
     
+
     def get_response(self, request):
-        if request.user.auth_crypto.count() >= crypto_auth_setting.max_token_per_user:
-            return Response(
-                    {"detail": "Maximum amount of tokens allowed per user exceeded."},
-                    status=status.HTTP_403_FORBIDDEN
-                )
-
-        instance = get_token_model().objects.create(user=request.user)
-
-        return Response(self.get_response_data(instance), status=200)
+        try:
+            instance = get_token_model().objects.create(user=request.user)
+            return Response(self.get_response_data(instance), status=status.HTTP_200_OK)
+        except ValidationError as e:
+            
+            return Response({"detail": str(e.message)}, status=status.HTTP_403_FORBIDDEN)
 
 
     def post(self, request):
@@ -68,7 +67,7 @@ class UpdateLoginView(LoginView):
             
         instance = get_token_model().objects.create(user=request.user)
 
-        return Response(self.get_response_data(instance), status=200)
+        return Response(self.get_response_data(instance), status=status.HTTP_200_OK)
 
 
 class LogoutView(APIView):
