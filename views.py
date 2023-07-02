@@ -40,19 +40,21 @@ class LoginView(APIView):
         serializer = self.get_serializer
 
         return serializer(obj).data
-
-
-    def post(self, request):
-
+    
+    def get_response(self, request):
         if request.user.auth_crypto.count() >= crypto_auth_setting.max_token_per_user:
             return Response(
-                    {"error": "Maximum amount of tokens allowed per user exceeded."},
+                    {"detail": "Maximum amount of tokens allowed per user exceeded."},
                     status=status.HTTP_403_FORBIDDEN
                 )
 
         instance = get_token_model().objects.create(user=request.user)
 
         return Response(self.get_response_data(instance), status=200)
+
+
+    def post(self, request):
+        return self.get_response(request)
     
 
 class UpdateLoginView(LoginView):

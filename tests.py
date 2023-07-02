@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
+from django.db.models import signals
 
 
 from .models import CryptoToken, get_token_model
@@ -29,6 +30,7 @@ class TestCryptoAuthetication(TestCase):
 
 
     def setUp(self) -> None:
+        signals.post_save.receivers = []
         self.username = 'testuser'
         self.password = 'testpass'
 
@@ -50,7 +52,8 @@ class TestCryptoAuthetication(TestCase):
             self.client.credentials(HTTP_AUTHORIZATION=get_auth_header(self.username, self.password)) 
             self.client.post(url)
 
-    
+
+
     def test_create_token_and_refresh_token(self):
         create_user = User.objects.create(username="UserTest")
         key = CryptoToken.objects.create(create_user)
@@ -114,7 +117,7 @@ class TestCryptoAuthetication(TestCase):
         to_json = response.json()
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(to_json.get("error"), "Maximum amount of tokens allowed per user exceeded.")
+        self.assertEqual(to_json.get("detail"), "Maximum amount of tokens allowed per user exceeded.")
 
 
     def test_token_authentication(self):
@@ -335,3 +338,4 @@ class TestCryptoAuthetication(TestCase):
 
         with self.assertRaises(Http404):
             get_object_or_404(CryptoToken, key=self.token.key)
+  

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CryptoAuthConfig(AppConfig):
+class DjangoCryptoAuthConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'crypto_auth'
+    name = 'django_crypto_auth'

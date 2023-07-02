@@ -18,7 +18,7 @@ class CryptoAuthDefaultSettings:
     
 class CryptoAuthSettings:
 
-    token_model = getattr(settings, 'CRYPTO_AUTH_TOKEN_MODEL', 'crypto_auth.CryptoToken')
+    token_model = getattr(settings, 'CRYPTO_AUTH_TOKEN_MODEL', 'django_crypto_auth.CryptoToken')
     
     @property 
     def token_keywoard(self):
