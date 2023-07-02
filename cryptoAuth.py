@@ -7,7 +7,7 @@ from typing import Union, List, Tuple
 try:
     from .app_settings import crypto_auth_default_setting, CryptoAuthSettings
 except:
-    raise ImproperlyConfigured("Missing crypto_auth settings")
+    raise ImproperlyConfigured("Missing django_crypto_auth settings")
     
 
 alphabet = string.ascii_lowercase

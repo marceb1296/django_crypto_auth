@@ -9,7 +9,6 @@ from django.utils import timezone
 from .app_settings import crypto_auth_setting
 from .models import get_token_model, CryptoToken
 from .cryptoAuth import CryptoAuthentication
-from django.db.models.query import QuerySet
 
 
 class TokenAuthentication(BaseAuthentication):
