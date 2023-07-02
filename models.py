@@ -22,6 +22,10 @@ class AuthTokenManager(models.Manager):
             expiry=crypto_auth_setting.get_token_expiry
         ):
 
+        for _token in user.auth_crypto.all():
+            if _token.expiry < timezone.now():
+                    _token.delete()
+
         if user.auth_crypto.count() >= crypto_auth_setting.max_token_per_user:
             raise ValidationError("Maximum amount of tokens allowed per user exceeded.")
 
