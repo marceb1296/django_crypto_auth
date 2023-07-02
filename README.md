@@ -1,8 +1,8 @@
-# crypto_auth
+# django_crypto_auth
 
 ## Documentation:
 
-[crypto_auth Documentation](https://docs.mhcode.xyz)
+[django_crypto_auth Documentation](https://docs.mhcode.xyz)
 
 ## Django Rest - Token Based Authentication
 
@@ -45,10 +45,10 @@ If user is succesfully authenticated, response will return a JSON:
         - Has to be bettwen 2 and 15
         - Default = 4
 
-    - CRYPTO_AUTH_TOKEN_EXPIRY: dict - tuple = ("<keywoard>": n: int)
+    - CRYPTO_AUTH_TOKEN_EXPIRY: dict - tuple = ("<keywoard>", n: int)
         - keywoard should be:
             - seconds, minutes, hours, days or weeks
-        - Default = ("minutes": 3)
+        - Default = ("minutes", 3)
 
 
 # Serializer:
@@ -83,7 +83,7 @@ More info [Here.](https://www.django-rest-framework.org/api-guide/authentication
 # Test
 
     # go to crypto_auth
-    $ cd crypto_auth
+    $ cd django_crypto_auth
 
     # move to test branch
     $ git checkout test
