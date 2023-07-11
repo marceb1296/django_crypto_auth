@@ -40,7 +40,9 @@ class LoginView(APIView):
 
         serializer = self.get_serializer
 
-        return serializer(obj).data
+        return serializer(obj, context={
+			"user": obj.user
+		}).data
     
 
     def get_response(self, request):
