@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.db.models import Model
 from rest_framework import serializers
+from django.utils.module_loading import import_string
 
 from .models import get_token_model
 from .app_settings import crypto_auth_setting
@@ -24,11 +25,13 @@ class LoginView(APIView):
     @property
     def get_serializer(self):
         if self.serializer:
-
-            if not isinstance(self.serializer(), serializers.Serializer):
+            serializerClass = import_string(self.serializer)
+            if not isinstance(serializerClass(), serializers.Serializer):
                 raise TypeError("""
                     CRYPTO_AUTH_TOKEN_SERIALIZER must be a Serializer instance, got %s
-                """ % self.serializer.__class__.__name__) # type: ignore
+                """ % serializerClass().__class__.__name__) # type: ignore
+            
+            return serializerClass
         else:
             from .serializer import TokenSerializer
             self.serializer = TokenSerializer
@@ -40,7 +43,9 @@ class LoginView(APIView):
 
         serializer = self.get_serializer
 
-        return serializer(obj).data
+        return serializer(obj, context={
+			"user": obj.user
+		}).data
     
 
     def get_response(self, request):

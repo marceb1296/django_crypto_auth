@@ -24,3 +24,5 @@ def create_token_shuffle():
     subprocess.call(cmd_two, shell=True)
 
     print("Token shuffle for crypto_app was successfully created!")
+
+
