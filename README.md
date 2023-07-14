@@ -1,8 +1,8 @@
-# crypto_auth
+# django_crypto_auth
 
 ## Documentation:
 
-In progress, you will be able to find it at the following link: [Documentation](https://mhcode.xyz/docs/crypto_auth)
+[django_crypto_auth Documentation](https://docs.mhcode.xyz)
 
 ## Django Rest - Token Based Authentication
 
@@ -25,6 +25,10 @@ If user is succesfully authenticated, response will return a JSON:
         - The order will determine how the token will be encrypted
         - You can use create_token_shuffle method from crypto_auth.helper to generate one
 
+    - CRYPTO_AUTH_TOKEN_SERIALIZER: string
+        - Override django_crypto_auth Serializer
+        - Format should be -> "app.serializer.model"
+
     - CRYPTO_AUTH_TOKEN_MODEL: str
         - Token model to use
         - Default = "crypto_auth.CryptoToken"
@@ -45,15 +49,15 @@ If user is succesfully authenticated, response will return a JSON:
         - Has to be bettwen 2 and 15
         - Default = 4
 
-    - CRYPTO_AUTH_TOKEN_EXPIRY: dict - tuple = ("<keywoard>": n: int)
+    - CRYPTO_AUTH_TOKEN_EXPIRY: dict - tuple = ("<keywoard>", n: int)
         - keywoard should be:
             - seconds, minutes, hours, days or weeks
-        - Default = ("minutes": 3)
+        - Default = ("minutes", 3)
 
 
 # Serializer:
 
-if you want to override it, needs to be done in a view, ex.
+if you want to override it, needs to be done in a view or using CRYPTO_AUTH_TOKEN_SERIALIZER, ex.
 
     # views.py
     from crypto_auth.views import LoginView
@@ -66,6 +70,13 @@ if you want to override it, needs to be done in a view, ex.
     ...
     path("route", CustomView.as_view()),
     ...
+
+
+    ---------------
+
+    # settings.py
+
+    CRYPTO_AUTH_TOKEN_SERIALIZER = "myapp.serializer.MyCustomSerializer"
 
 ## Note:
 
@@ -83,7 +94,7 @@ More info [Here.](https://www.django-rest-framework.org/api-guide/authentication
 # Test
 
     # go to crypto_auth
-    $ cd crypto_auth
+    $ cd django_crypto_auth
 
     # move to test branch
     $ git checkout test

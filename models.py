@@ -30,7 +30,7 @@ class AuthTokenManager(models.Manager):
             raise ValidationError("Maximum amount of tokens allowed per user exceeded.")
 
         token = CryptoAuthentication()
-        key_encrypted  = token.key(token.generate_token)
+        key_encrypted = token.key(token.generate_token)
         key = token.combine_key_with_token(key_encrypted)
         
         expiry = timezone.now() + expiry

@@ -25,7 +25,7 @@ def get_auth_header(username, password):
     return 'Basic %s' % base64.b64encode(
         ('%s:%s' % (username, password)).encode('ascii')).decode()
 
-@override_settings(CRYPTO_AUTH_TOKEN_SHUFFLE=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"])
+@override_settings(CRYPTO_AUTH_TOKEN_SHUFFLE=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"], CRYPTO_AUTH_TOKEN_SERIALIZER="django_crypto_auth.serializer.TokenSerializer")
 class TestCryptoAuthetication(TestCase):
 
 
