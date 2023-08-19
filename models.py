@@ -61,7 +61,7 @@ class AbstractCryptoAuthToken(models.Model):
     def get_token_key(self) -> str:
         crypto = CryptoAuthentication()
         key = crypto.token_key(self.key, subset=True)
-        return crypto.decript_key(key, crypto_auth_setting.get_token_shuffle)
+        return crypto.decrypt_key(key, crypto_auth_setting.get_token_shuffle)
     
     @property
     def get_expiry(self):

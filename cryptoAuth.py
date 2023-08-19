@@ -16,7 +16,7 @@ class CryptoAuthentication(CryptoAuthSettings):
 
     @property
     def generate_token(self) -> str:
-        token = secrets.token_bytes(crypto_auth_default_setting.default_lenght)
+        token = secrets.token_bytes(crypto_auth_default_setting.default_length)
         hash_object = hashlib.sha256(token)
         return hash_object.hexdigest()
     
@@ -46,7 +46,7 @@ class CryptoAuthentication(CryptoAuthSettings):
         return _encrypted
     
     
-    def decript_key(self, encrypt: str, shuffle: Union[list, Tuple]) -> str:
+    def decrypt_key(self, encrypt: str, shuffle: Union[list, Tuple]) -> str:
         _decrypted = ""
 
         for i in encrypt:

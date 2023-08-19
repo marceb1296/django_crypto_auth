@@ -6,7 +6,7 @@ from . import helper
 
 class CryptoAuthDefaultSettings:
 
-    default_lenght = 32
+    default_length = 32
     length_token = 64
 
     def __setattr__(self) -> None:
@@ -21,15 +21,15 @@ class CryptoAuthSettings:
     token_model = getattr(settings, 'CRYPTO_AUTH_TOKEN_MODEL', 'django_crypto_auth.CryptoToken')
     
     @property 
-    def token_keywoard(self):
-        token_keywoard = getattr(settings, 'CRYPTO_AUTH_TOKEN_KEYWOARD', 'TSESSION')
+    def token_keyword(self):
+        token_keyword = getattr(settings, 'CRYPTO_AUTH_TOKEN_KEYWORD', 'TSESSION')
         
-        if not isinstance(token_keywoard, str):
+        if not isinstance(token_keyword, str):
             raise TypeError("""
                 CRYPTO_AUTH_MAX_TOKEN_LIMIT value must be str, got %s
-            """ % token_keywoard.__class__.__name__)
+            """ % token_keyword.__class__.__name__)
 
-        return token_keywoard
+        return token_keyword
 
 
     @property

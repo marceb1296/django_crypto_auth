@@ -20,7 +20,7 @@ class TokenAuthentication(BaseAuthentication):
         Authorization: Token 401f7ac837da42b97f613d789819ff93537bee6a
     """
 
-    keyword = crypto_auth_setting.token_keywoard
+    keyword = crypto_auth_setting.token_keyword
     crypto = CryptoAuthentication()
     is_refresh_token = False
 
@@ -78,12 +78,12 @@ class TokenAuthentication(BaseAuthentication):
     def _verify_token(self, query: CryptoToken, key: str) -> bool:
         _key_query = query.get_token_key
         _key_token = self.crypto.token_key(key, subset=True)
-        _key_token_decripted = self.crypto.decript_key(_key_token, crypto_auth_setting.get_token_shuffle)
+        _key_token_decrypted = self.crypto.decrypt_key(_key_token, crypto_auth_setting.get_token_shuffle)
 
         if self.is_refresh_token:
-            return self.crypto.verify_key(_key_query, _key_token_decripted[::-1])
+            return self.crypto.verify_key(_key_query, _key_token_decrypted[::-1])
 
-        return self.crypto.verify_key(_key_query, _key_token_decripted)
+        return self.crypto.verify_key(_key_query, _key_token_decrypted)
     
 class RefreshTokenAuthentication(TokenAuthentication):
     is_refresh_token = True

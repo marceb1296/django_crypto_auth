@@ -1,4 +1,3 @@
-# pyright: reportGeneralTypeIssues=false
 import base64
 from django.http import Http404
 from django.test import TestCase, override_settings
@@ -25,8 +24,8 @@ def get_auth_header(username, password):
     return 'Basic %s' % base64.b64encode(
         ('%s:%s' % (username, password)).encode('ascii')).decode()
 
-@override_settings(CRYPTO_AUTH_TOKEN_SHUFFLE=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"], CRYPTO_AUTH_TOKEN_SERIALIZER="django_crypto_auth.serializer.TokenSerializer")
-class TestCryptoAuthetication(TestCase):
+@override_settings(CRYPTO_AUTH_TOKEN_SHUFFLE=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"])
+class TestCryptoAuthentication(TestCase):
 
 
     def setUp(self) -> None:
@@ -64,7 +63,7 @@ class TestCryptoAuthetication(TestCase):
 
         refresh_token = key.get_refresh_token
         get_refresh_token_key = crypto.token_key(refresh_token, subset=True)
-        decrypt_key = crypto.decript_key(get_refresh_token_key, crypto_auth_setting.get_token_shuffle)
+        decrypt_key = crypto.decrypt_key(get_refresh_token_key, crypto_auth_setting.get_token_shuffle)
 
         self.assertEqual(_key, decrypt_key[::-1])
 
@@ -81,7 +80,7 @@ class TestCryptoAuthetication(TestCase):
     def test_call_access_view_with_refresh_token(self):
         url = reverse("my_test_view")
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.refresh_token
         ))
 
@@ -95,7 +94,7 @@ class TestCryptoAuthetication(TestCase):
     def test_call_update_view_with_token(self):
         url = reverse("cryptoAuth_login_update")
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.token.key
         ))
 
@@ -123,7 +122,7 @@ class TestCryptoAuthetication(TestCase):
     def test_token_authentication(self):
         url = reverse("my_test_view")
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.token.key
         ))
 
@@ -137,7 +136,7 @@ class TestCryptoAuthetication(TestCase):
     def test_token_authentication_with_space(self):
         url = reverse("my_test_view")
         self.client.credentials(HTTP_AUTHORIZATION="%s 767 878" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
         ))
 
         response = self.client.get(url)
@@ -176,7 +175,7 @@ class TestCryptoAuthetication(TestCase):
     def test_empty_token_authentication(self):
         url = reverse("my_test_view")
         self.client.credentials(HTTP_AUTHORIZATION="%s " % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
         ))
 
         response = self.client.get(url)
@@ -189,7 +188,7 @@ class TestCryptoAuthetication(TestCase):
     def test_token_authentication_with_special_caracteres(self):
         url = reverse("my_test_view")
         self.client.credentials(HTTP_AUTHORIZATION="%s a2ä3" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
         ))
 
         response = self.client.get(url)
@@ -206,7 +205,7 @@ class TestCryptoAuthetication(TestCase):
 
         url = reverse("my_test_view")
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.token.key
         ))
 
@@ -224,7 +223,7 @@ class TestCryptoAuthetication(TestCase):
         self.token.save()
 
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.token.key
         ))
 
@@ -240,7 +239,7 @@ class TestCryptoAuthetication(TestCase):
         url = reverse("my_test_view")
 
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.token.key[:10]
         ))
 
@@ -272,7 +271,7 @@ class TestCryptoAuthetication(TestCase):
         url = reverse("my_test_view")
 
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.token.key[:10]
         ))
 
@@ -289,7 +288,7 @@ class TestCryptoAuthetication(TestCase):
         url = reverse("cryptoAuth_logout")
 
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.token.key
         ))
 
@@ -314,7 +313,7 @@ class TestCryptoAuthetication(TestCase):
         url = reverse("cryptoAuth_logout_all")
 
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.token.key
         ))
 
@@ -328,7 +327,7 @@ class TestCryptoAuthetication(TestCase):
     
         url = reverse("cryptoAuth_login_update")
         self.client.credentials(HTTP_AUTHORIZATION="%s %s" % (
-            crypto_auth_setting.token_keywoard,
+            crypto_auth_setting.token_keyword,
             self.refresh_token
         ))
 

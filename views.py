@@ -29,7 +29,7 @@ class LoginView(APIView):
             if not isinstance(serializerClass(), serializers.Serializer):
                 raise TypeError("""
                     CRYPTO_AUTH_TOKEN_SERIALIZER must be a Serializer instance, got %s
-                """ % serializerClass().__class__.__name__) # type: ignore
+                """ % serializerClass().__class__.__name__)
             
             return serializerClass
         else:
