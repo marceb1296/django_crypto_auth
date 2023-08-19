@@ -8,7 +8,7 @@
 
 # Response:
 
-If user is succesfully authenticated, response will return a JSON:
+If user is successfully authenticated, response will return a JSON:
     
     {
         "token": "token",
@@ -27,17 +27,10 @@ If user is succesfully authenticated, response will return a JSON:
 
     - CRYPTO_AUTH_TOKEN_SERIALIZER: string
         - Override django_crypto_auth Serializer
-        - Format should be -> "app.serializer.model"
+        - Format should be -> "myapp.serializer.SerializerClass"
 
-    - CRYPTO_AUTH_TOKEN_MODEL: str
-        - Token model to use
-        - Default = "crypto_auth.CryptoToken"
-        - If override it, model needs to have the field "key" and the attributes:
-            - get_expiry -> time in seconds, ex. 180
-            - get_refresh_token -> refresh token
-
-    - CRYPTO_AUTH_TOKEN_KEYWOARD: str
-        - Header keywoard authentication
+    - CRYPTO_AUTH_TOKEN_KEYWORD: str
+        - Header keyword authentication
         - Default = "TSESSION"
 
     - CRYPTO_AUTH_MAX_TOKEN_LIMIT: int
@@ -46,37 +39,15 @@ If user is succesfully authenticated, response will return a JSON:
 
     - CRYPTO_AUTH_SUBSET_LENGTH: int
         - Subset from Token
-        - Has to be bettwen 2 and 15
+        - Has to be between 2 and 15
         - Default = 4
 
-    - CRYPTO_AUTH_TOKEN_EXPIRY: dict - tuple = ("<keywoard>", n: int)
-        - keywoard should be:
+    - CRYPTO_AUTH_TOKEN_EXPIRY: dict - tuple = ("<keyword>", n: int)
+        - keyword should be:
             - seconds, minutes, hours, days or weeks
         - Default = ("minutes", 3)
 
 
-# Serializer:
-
-if you want to override it, needs to be done in a view or using CRYPTO_AUTH_TOKEN_SERIALIZER, ex.
-
-    # views.py
-    from crypto_auth.views import LoginView
-
-    class CustomView(LoginView):
-        serializer = CustomSerializer
-
-
-    # urls.py
-    ...
-    path("route", CustomView.as_view()),
-    ...
-
-
-    ---------------
-
-    # settings.py
-
-    CRYPTO_AUTH_TOKEN_SERIALIZER = "myapp.serializer.MyCustomSerializer"
 
 ## Note:
 
@@ -101,4 +72,4 @@ More info [Here.](https://www.django-rest-framework.org/api-guide/authentication
 
     # go back and run
     $ cd ..
-    $ python manage.py test crypto_auth
+    $ python manage.py test django_crypto_auth
