@@ -21,10 +21,11 @@ class TokenSerializer(serializers.ModelSerializer):
     refresh_token = serializers.SerializerMethodField()
     expiry = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
+    expiry_date = serializers.CharField(source="expiry")
 
     class Meta:
         model = CryptoToken
-        fields = ('token', 'expiry', 'refresh_token', "user")
+        fields = ('token', 'expiry', 'refresh_token', "user", "expiry_date")
 
 
     def get_refresh_token(self, obj):
