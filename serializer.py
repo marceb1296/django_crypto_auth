@@ -21,7 +21,7 @@ class TokenSerializer(serializers.ModelSerializer):
     refresh_token = serializers.SerializerMethodField()
     expiry = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
-    expiry_date = serializers.CharField(source="expiry")
+    expiry_date = serializers.DateTimeField(source="expiry", format='%a, %d %b %Y %H:%M:%S GMT')
 
     class Meta:
         model = CryptoToken
