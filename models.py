@@ -1,10 +1,10 @@
-from django.db import models
-from django.contrib.auth.models import User
 from django.apps import apps
-from django.core.exceptions import ImproperlyConfigured
-from .cryptoAuth import CryptoAuthentication
+from django.contrib.auth.models import User
+from django.core.exceptions import ImproperlyConfigured, ValidationError
+from django.db import models
 from django.utils import timezone
-from django.core.exceptions import ValidationError
+
+from .cryptoAuth import CryptoAuthentication
 
 try:
     from .app_settings import crypto_auth_setting
@@ -63,9 +63,6 @@ class AbstractCryptoAuthToken(models.Model):
         key = crypto.token_key(self.key, subset=True)
         return crypto.decrypt_key(key, crypto_auth_setting.get_token_shuffle)
     
-    @property
-    def get_expiry(self):
-        return int(crypto_auth_setting.get_token_expiry.total_seconds())
     
     @property
     def get_refresh_token(self) -> str:
