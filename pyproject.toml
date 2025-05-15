@@ -1,0 +1,26 @@
+[project]
+name = "django_crypto_auth"
+version = "0.1"
+description = "Encrypted, token‑based authentication for Django REST Framework"
+readme = "README.md"
+license = "MIT"
+authors = [
+  { name = "Marcelino", email = "marce1996hr@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+  "Django>=4.2",
+  "djangorestframework>=3.12"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/marceb1296/django_crypto_auth"
+"Documentation" = "https://docs.mhcode.dev"
+"Issue Tracker" = "https://github.com/marceb1296/django_crypto_auth/issues"
+
+[build-system]
+requires = ["setuptools>=42", "wheel", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = []

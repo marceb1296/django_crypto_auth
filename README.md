@@ -1,29 +1,30 @@
-# django_crypto_auth
+# 🛡️ django_crypto_auth
 
-## Documentation:
+**Token-based authentication for Django REST Framework using encrypted tokens.**
 
-[django_crypto_auth Documentation](https://docs.mhcode.xyz)
+## 📚 Documentation
 
-## Django Rest - Token Based Authentication
+[django_crypto_auth Documentation](https://docs.mhcode.dev)
 
-# Response:
+
+## 🔐 Authentication Response
 
 If user is successfully authenticated, response will return a JSON:
     
     {
         "token": "token",
-        "expiry": n,
+        "expiry_date": "gmt datetime",
         "refresh_token": "refresh token,
         "user": "username"
     }
     
 
-# Settings:
+## ⚙️ Configuration Settings
 
     - CRYPTO_AUTH_TOKEN_SHUFFLE: tuple | list *
         - Items have to be string letters from "a" to "j"
         - The order will determine how the token will be encrypted
-        - You can use create_token_shuffle method from crypto_auth.helper to generate one
+        - You can use create_token_shuffle method from crypto_auth.helper to generate one or calling "python manage.py createtoken"
 
     - CRYPTO_AUTH_TOKEN_SERIALIZER: string
         - Override django_crypto_auth Serializer
