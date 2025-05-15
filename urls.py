@@ -1,6 +1,6 @@
-from django.urls import path, re_path, include
-from django.views.generic import TemplateView
-from .views import LoginView, LogoutView, LogoutAllView, MyTestView, UpdateLoginView
+from django.urls import path
+
+from .views import LoginView, LogoutAllView, LogoutView, MyTestView, UpdateLoginView
 
 urlpatterns = [
     path('login', LoginView.as_view(), name="cryptoAuth_login"),
