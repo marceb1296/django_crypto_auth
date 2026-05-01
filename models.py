@@ -56,6 +56,9 @@ class AbstractCryptoAuthToken(models.Model):
     class Meta:
         abstract = True
         ordering = ["expiry"]
+        indexes = [
+            models.Index(fields=["expiry", "key"]),
+        ]
 
     @property
     def get_token_key(self) -> str:

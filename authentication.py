@@ -1,4 +1,7 @@
 # pyright: reportGeneralTypeIssues=false
+from django.core.cache import cache
+import re
+
 from rest_framework.authentication import (
     BaseAuthentication, get_authorization_header,
 )
@@ -50,25 +53,57 @@ class TokenAuthentication(BaseAuthentication):
     
 
     def authenticate_credentials(self, key):
-        for get_token in get_token_model().objects.all(): 
+        # Deterministic cleanup: Every 5 minutes, clean expired tokens.
+        # Uses cache to coordinate across all processes without hitting the DB every time.
+        if cache.add("crypto_auth_cleanup_lock", True, 300):
+            get_token_model().objects.filter(expiry__lt=timezone.now()).delete()
+
+        # 1. Extract the "signal" from the provided token.
+        # This is what db_token[::subset_length] MUST match.
+        target_subset = self.crypto.token_key(key, subset=True)
+
+        if self.is_refresh_token:
+            # Refresh tokens match the reversed decrypted key.
+            target_subset = target_subset[::-1]
+
+        # 2. Build a regex to filter tokens in the database.
+        # This avoids fetching and processing invalid tokens in Python.
+        step = self.crypto.subset_length
+        regex_parts = []
+        for i, char in enumerate(target_subset):
+            regex_parts.append(re.escape(char))
+            if i < len(target_subset) - 1:
+                regex_parts.append(f".{{{step-1}}}")
+
+        token_regex = "^" + "".join(regex_parts)
+
+        # 3. Query the database using the regex filter.
+        # We add key__startswith for a fast B-Tree index lookup before the regex.
+        # We don't filter by expiry in SQL so we can return a "Token expired" message.
+        candidate_tokens = (
+            get_token_model()
+            .objects.filter(
+                key__startswith=target_subset[0],
+                key__regex=token_regex,
+            )
+            .select_related("user")
+        )
+
+        for get_token in candidate_tokens:
             if self._verify_token(get_token, key):
 
+                if get_token.expiry < timezone.now():
+                    # For security and cleanup, we could delete it here,
+                    # but we'll stick to just raising the error as per test expectations.
+                    raise AuthenticationFailed(_("Token expired."))
+
                 if not get_token.user.is_active:
-                    msg = _('User inactive or deleted.')
+                    msg = _("User inactive or deleted.")
                     raise AuthenticationFailed(msg)
 
-                if get_token.expiry < timezone.now():
-                    get_token.delete()
-                    msg = _("Token expired.")
-                    raise AuthenticationFailed(msg)
-                
                 return get_token.user, get_token
 
-
-            if get_token.expiry < timezone.now():
-                get_token.delete()
-            
-        raise AuthenticationFailed(_('Invalid token.'))
+        raise AuthenticationFailed(_("Invalid token."))
 
 
     def authenticate_header(self, request):

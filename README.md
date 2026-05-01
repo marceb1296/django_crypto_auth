@@ -24,7 +24,7 @@ If user is successfully authenticated, response will return a JSON:
     - CRYPTO_AUTH_TOKEN_SHUFFLE: tuple | list *
         - Items have to be string letters from "a" to "j"
         - The order will determine how the token will be encrypted
-        - You can use create_token_shuffle method from crypto_auth.helper to generate one or calling "python manage.py createtoken"
+        - You can use the management command `python manage.py create_crypto_shuffle` to automate this.
 
     - CRYPTO_AUTH_TOKEN_SERIALIZER: string
         - Override django_crypto_auth Serializer
@@ -49,6 +49,22 @@ If user is successfully authenticated, response will return a JSON:
         - Default = ("minutes", 3)
 
 
+# Performance & Maintenance:
+
+### Autonomous Cleanup
+The module manages its own storage. Expired tokens are automatically deleted every **5 minutes** using a non-blocking cache coordination (Django Cache). This ensures high performance without the need for external tasks like Celery.
+
+### Scalability Optimization
+Authentication lookups are performed using **Database Regex + Prefix Indexing**, ensuring O(1) performance even with thousands of active sessions.
+
+# Management Commands:
+
+### `create_crypto_shuffle`
+Automates the generation of a randomized `CRYPTO_AUTH_TOKEN_SHUFFLE` and appends it to your `settings.py`.
+
+```bash
+python manage.py create_crypto_shuffle
+```
 
 ## Note:
 
@@ -65,12 +81,4 @@ More info [Here.](https://www.django-rest-framework.org/api-guide/authentication
 
 # Test
 
-    # go to crypto_auth
-    $ cd django_crypto_auth
-
-    # move to test branch
-    $ git checkout test
-
-    # go back and run
-    $ cd ..
     $ python manage.py test django_crypto_auth

@@ -18,23 +18,25 @@ class LoginView(APIView):
 
     authentication_classes = api_settings.DEFAULT_AUTHENTICATION_CLASSES
     permission_classes = (IsAuthenticated,)
-    serializer = getattr(settings, 'CRYPTO_AUTH_TOKEN_SERIALIZER', None)
+    serializer = getattr(settings, "CRYPTO_AUTH_TOKEN_SERIALIZER", None)
 
     @property
     def get_serializer(self):
         if self.serializer:
             serializerClass = import_string(self.serializer)
             if not isinstance(serializerClass(), serializers.Serializer):
-                raise TypeError("""
+                raise TypeError(
+                    """
                     CRYPTO_AUTH_TOKEN_SERIALIZER must be a Serializer instance, got %s
-                """ % serializerClass().__class__.__name__)
-            
+                """
+                    % serializerClass().__class__.__name__
+                )
+
             return serializerClass
         else:
             from .serializer import TokenSerializer
-            self.serializer = TokenSerializer
-        
-        return self.serializer
+
+            return TokenSerializer
 
 
     def get_response_data(self, obj: Model) -> dict:
